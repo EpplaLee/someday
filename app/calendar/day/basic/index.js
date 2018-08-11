@@ -6,6 +6,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import {shouldUpdate} from '../../../component-updater';
+import solarLunar from '../../../solarLunar';
 
 import styleConstructor from './style';
 
@@ -19,7 +20,8 @@ class Day extends Component {
     marking: PropTypes.any,
     onPress: PropTypes.func,
     onLongPress: PropTypes.func,
-    date: PropTypes.object
+    date: PropTypes.object,
+    day: PropTypes.object,
   };
 
   constructor(props) {
@@ -36,15 +38,21 @@ class Day extends Component {
     this.props.onLongPress(this.props.date);
   }
 
+  solarToLunar(day) {
+    return solarLunar.solar2lunar(day.getFullYear(), day.getMonth(), day.getDate())
+  }
+
   shouldComponentUpdate(nextProps) {
-    return shouldUpdate(this.props, nextProps, ['state', 'children', 'marking', 'onPress', 'onLongPress']);
+    return shouldUpdate(this.props, nextProps, ['state', 'children', 'marking', 'onPress', 'onLongPress', 'weekNumber']);
   }
 
   render() {
+    const lunarInfo  = this.solarToLunar(this.props.day);
     const containerStyle = [this.style.base];
-    const textStyle = [this.style.text];
+    const solarTextStyle = [this.style.solarText];
+    const lunarTextStyle = [this.style.lunarText];
     const dotStyle = [this.style.dot];
-
+    
     let marking = this.props.marking || {};
     if (marking && marking.constructor === Array && marking.length) {
       marking = {
@@ -67,12 +75,16 @@ class Day extends Component {
         containerStyle.push({backgroundColor: marking.selectedColor});
       }
       dotStyle.push(this.style.selectedDot);
-      textStyle.push(this.style.selectedText);
+      solarTextStyle.push(this.style.selectedText);
+      lunarTextStyle.push(this.style.selectedText);
     } else if (isDisabled) {
-      textStyle.push(this.style.disabledText);
+      solarTextStyle.push(this.style.disabledText);
+      lunarTextStyle.push(this.style.disabledText);
+
     } else if (this.props.state === 'today') {
       containerStyle.push(this.style.today);
-      textStyle.push(this.style.todayText);
+      solarTextStyle.push(this.style.todayText);
+      lunarTextStyle.push(this.style.todayText);
     }
 
     return (
@@ -83,7 +95,8 @@ class Day extends Component {
         activeOpacity={marking.activeOpacity}
         disabled={marking.disableTouchEvent}
       >
-        <Text allowFontScaling={false} style={textStyle}>{String(this.props.children)}</Text>
+        <Text allowFontScaling={false} style={solarTextStyle}>{String(this.props.children)}</Text>
+        <Text allowFontScaling={false} style={lunarTextStyle}>{lunarInfo.term || lunarInfo.dayCn}</Text>
         {dot}
       </TouchableOpacity>
     );

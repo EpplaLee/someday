@@ -12,11 +12,20 @@ export default function styleConstructor(theme={}) {
       alignItems: 'center'
     },
     text: {
-      marginTop: Platform.OS === 'android' ? 4 : 6,
-      fontSize: appStyle.textDayFontSize,
+      fontSize: 14,
       fontFamily: appStyle.textDayFontFamily,
-      fontWeight: '300',
+      fontWeight: '200',
       color: appStyle.dayTextColor,
+      backgroundColor: 'rgba(255, 255, 255, 0)'
+    },
+    solarText: {
+      fontSize: 14,
+      color: appStyle.dayTextColor,
+      backgroundColor: 'rgba(255, 255, 255, 0)'
+    },
+    lunarText: {
+      fontSize: 10,
+      color: '#999999',
       backgroundColor: 'rgba(255, 255, 255, 0)'
     },
     alignedText: {

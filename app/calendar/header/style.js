@@ -17,7 +17,7 @@ export default function(theme={}) {
       fontSize: appStyle.textMonthFontSize,
       fontFamily: appStyle.textMonthFontFamily,
       fontWeight: appStyle.textMonthFontWeight,
-      color: appStyle.monthTextColor,
+      color: '#739EAF',
       margin: 10
     },
     arrow: {
@@ -26,10 +26,10 @@ export default function(theme={}) {
     arrowImage: {
       ...Platform.select({
         ios: {
-          tintColor: appStyle.arrowColor
+          tintColor: '#739EAF'
         },
         android: {
-          tintColor: appStyle.arrowColor
+          tintColor: '#739EAF'
         }
       })
     },
@@ -45,7 +45,7 @@ export default function(theme={}) {
       textAlign: 'center',
       fontSize: appStyle.textDayHeaderFontSize,
       fontFamily: appStyle.textDayHeaderFontFamily,
-      color: appStyle.textSectionTitleColor
+      color: '#739EAF'
     },
     ...(theme[STYLESHEET_ID] || {})
   });

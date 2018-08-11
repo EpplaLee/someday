@@ -12,16 +12,14 @@ import {
 } from 'react-navigation-redux-helpers'
 import { connect } from 'react-redux'
 
-import Loading from './containers/Loading'
-import Login from './containers/Login'
-import CalendarListPage from './containers/CalendarList'
-import CalendarPage from './containers/Calendar'
-import AgendaPage from './containers/Agenda'
+import Loading from './pages/Loading'
+import Login from './pages/Login'
+import CalendarListPage from './pages/CalendarList'
+import CalendarPage from './pages/Calendar'
+import AgendaPage from './pages/Agenda'
 
 const HomeNavigator = createBottomTabNavigator({
-  CalendarList: { screen: CalendarListPage },
-  Calendar: { screen: CalendarPage },
-  Agenda: { screen: AgendaPage }
+  Calendar: { screen: CalendarPage }
 })
 
 HomeNavigator.navigationOptions = ({ navigation }) => {

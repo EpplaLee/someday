@@ -154,6 +154,7 @@ class Calendar extends Component {
   }
 
   renderDay(day, id) {
+
     const minDate = parseDate(this.props.minDate);
     const maxDate = parseDate(this.props.maxDate);
     let state = '';
@@ -185,6 +186,7 @@ class Calendar extends Component {
           onLongPress={this.longPressDay}
           date={xdateToData(day)}
           marking={this.getDateMarking(day)}
+          day={day}
         >
           {date}
         </DayComp>
@@ -197,7 +199,6 @@ class Calendar extends Component {
     if (this.props.dayComponent) {
       return this.props.dayComponent;
     }
-
     switch (this.props.markingType) {
     case 'period':
       return UnitDay;
@@ -225,7 +226,13 @@ class Calendar extends Component {
   }
 
   renderWeekNumber (weekNumber) {
-    return <Day key={`week-${weekNumber}`} theme={this.props.theme} marking={{disableTouchEvent: true}} state='disabled'>{weekNumber}</Day>;
+    return <Day 
+      currentMonth={'shit'} 
+      key={`week-${weekNumber}`} 
+      theme={this.props.theme} 
+      marking={{disableTouchEvent: true}} 
+      e='disabled'>{weekNumber}
+    </Day>;
   }
 
   renderWeek(days, id) {

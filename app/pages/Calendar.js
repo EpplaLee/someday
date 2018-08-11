@@ -24,7 +24,7 @@ class CalendarPage extends Component {
       <View style={styles.container}>
         <Calendar style={{
           width: '100%',
-          height: '100%',
+          height: 320,
         }} />
       </View>
     )
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   icon: {
     width: 32,
