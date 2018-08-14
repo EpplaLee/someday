@@ -3,4 +3,4 @@
  * @Array Of Property
  * @return Number
  */
-export default [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+export default [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]

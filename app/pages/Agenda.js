@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, Image } from 'react-native'
 import { connect } from 'react-redux'
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars'
 import { Button } from '../components'
 
 import { NavigationActions } from '../utils'
@@ -18,14 +18,15 @@ class AgendaPage extends Component {
     ),
   }
 
-
   render() {
     return (
       <View style={styles.container}>
-        <Agenda style={{
-          width: '100%',
-          height: '100%',
-        }} />
+        <Agenda
+          style={{
+            width: '100%',
+            height: '100%',
+          }}
+        />
       </View>
     )
   }

@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, Image } from 'react-native'
 import { connect } from 'react-redux'
-import { CalendarList, Agenda } from 'react-native-calendars';
-import Calendar from '../calendar';
+import { CalendarList, Agenda } from 'react-native-calendars'
+import Calendar from '../calendar'
 import { Button } from '../components'
+import TodoList from '../components/List'
 
 import { createAction, NavigationActions } from '../utils'
 
@@ -15,17 +16,21 @@ class CalendarPage extends Component {
       <Image
         style={[styles.icon, { tintColor: focused ? tintColor : 'gray' }]}
         source={require('../images/person.png')}
-      />)
+      />
+    ),
   }
 
   render() {
     const { login } = this.props
     return (
       <View style={styles.container}>
-        <Calendar style={{
-          width: '100%',
-          height: 320,
-        }} />
+        <Calendar
+          style={{
+            width: '100%',
+            height: 320,
+          }}
+        />
+        <TodoList />
       </View>
     )
   }

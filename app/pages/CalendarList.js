@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, Image } from 'react-native'
 import { connect } from 'react-redux'
-import { Calendar, CalendarList, Agenda } from 'react-native-calendars';
+import { Calendar, CalendarList, Agenda } from 'react-native-calendars'
 import { Button } from '../components'
 import { NavigationActions } from '../utils'
 
@@ -17,11 +17,10 @@ class CalendarListPage extends Component {
     ),
   }
 
-
   render() {
     return (
       <View style={styles.container}>
-       <CalendarList />
+        <CalendarList />
       </View>
     )
   }

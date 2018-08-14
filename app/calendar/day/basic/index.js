@@ -1,14 +1,10 @@
-import React, {Component} from 'react';
-import {
-  TouchableOpacity,
-  Text,
-  View
-} from 'react-native';
-import PropTypes from 'prop-types';
-import {shouldUpdate} from '../../../component-updater';
-import solarLunar from '../../../solarLunar';
+import React, { Component } from 'react'
+import { TouchableOpacity, Text, View } from 'react-native'
+import PropTypes from 'prop-types'
+import { shouldUpdate } from '../../../component-updater'
+import solarLunar from '../../../solarLunar'
 
-import styleConstructor from './style';
+import styleConstructor from './style'
 
 class Day extends Component {
   static propTypes = {
@@ -22,69 +18,83 @@ class Day extends Component {
     onLongPress: PropTypes.func,
     date: PropTypes.object,
     day: PropTypes.object,
-  };
+  }
 
   constructor(props) {
-    super(props);
-    this.style = styleConstructor(props.theme);
-    this.onDayPress = this.onDayPress.bind(this);
-    this.onDayLongPress = this.onDayLongPress.bind(this);
+    super(props)
+    this.style = styleConstructor(props.theme)
+    this.onDayPress = this.onDayPress.bind(this)
+    this.onDayLongPress = this.onDayLongPress.bind(this)
   }
 
   onDayPress() {
-    this.props.onPress(this.props.date);
+    this.props.onPress(this.props.date)
   }
+
   onDayLongPress() {
-    this.props.onLongPress(this.props.date);
+    this.props.onLongPress(this.props.date)
   }
 
   solarToLunar(day) {
-    return solarLunar.solar2lunar(day.getFullYear(), day.getMonth(), day.getDate())
+    return solarLunar.solar2lunar(
+      day.getFullYear(),
+      day.getMonth(),
+      day.getDate()
+    )
   }
 
   shouldComponentUpdate(nextProps) {
-    return shouldUpdate(this.props, nextProps, ['state', 'children', 'marking', 'onPress', 'onLongPress', 'weekNumber']);
+    return shouldUpdate(this.props, nextProps, [
+      'state',
+      'children',
+      'marking',
+      'onPress',
+      'onLongPress',
+      'weekNumber',
+    ])
   }
 
   render() {
-    const lunarInfo  = this.solarToLunar(this.props.day);
-    const containerStyle = [this.style.base];
-    const solarTextStyle = [this.style.solarText];
-    const lunarTextStyle = [this.style.lunarText];
-    const dotStyle = [this.style.dot];
-    
-    let marking = this.props.marking || {};
+    const lunarInfo = this.solarToLunar(this.props.day)
+    const containerStyle = [this.style.base]
+    const solarTextStyle = [this.style.solarText]
+    const lunarTextStyle = [this.style.lunarText]
+    const dotStyle = [this.style.dot]
+
+    let marking = this.props.marking || {}
     if (marking && marking.constructor === Array && marking.length) {
       marking = {
-        marking: true
-      };
-    }
-    const isDisabled = typeof marking.disabled !== 'undefined' ? marking.disabled : this.props.state === 'disabled';
-    let dot;
-    if (marking.marked) {
-      dotStyle.push(this.style.visibleDot);
-      if (marking.dotColor) {
-        dotStyle.push({backgroundColor: marking.dotColor});
+        marking: true,
       }
-      dot = (<View style={dotStyle}/>);
+    }
+    const isDisabled =
+      typeof marking.disabled !== 'undefined'
+        ? marking.disabled
+        : this.props.state === 'disabled'
+    let dot
+    if (marking.marked) {
+      dotStyle.push(this.style.visibleDot)
+      if (marking.dotColor) {
+        dotStyle.push({ backgroundColor: marking.dotColor })
+      }
+      dot = <View style={dotStyle} />
     }
 
     if (marking.selected) {
-      containerStyle.push(this.style.selected);
+      containerStyle.push(this.style.selected)
       if (marking.selectedColor) {
-        containerStyle.push({backgroundColor: marking.selectedColor});
+        containerStyle.push({ backgroundColor: marking.selectedColor })
       }
-      dotStyle.push(this.style.selectedDot);
-      solarTextStyle.push(this.style.selectedText);
-      lunarTextStyle.push(this.style.selectedText);
+      dotStyle.push(this.style.selectedDot)
+      solarTextStyle.push(this.style.selectedText)
+      lunarTextStyle.push(this.style.selectedText)
     } else if (isDisabled) {
-      solarTextStyle.push(this.style.disabledText);
-      lunarTextStyle.push(this.style.disabledText);
-
+      solarTextStyle.push(this.style.disabledText)
+      lunarTextStyle.push(this.style.disabledText)
     } else if (this.props.state === 'today') {
-      containerStyle.push(this.style.today);
-      solarTextStyle.push(this.style.todayText);
-      lunarTextStyle.push(this.style.todayText);
+      containerStyle.push(this.style.today)
+      solarTextStyle.push(this.style.todayText)
+      lunarTextStyle.push(this.style.todayText)
     }
 
     return (
@@ -95,12 +105,16 @@ class Day extends Component {
         activeOpacity={marking.activeOpacity}
         disabled={marking.disableTouchEvent}
       >
-        <Text allowFontScaling={false} style={solarTextStyle}>{String(this.props.children)}</Text>
-        <Text allowFontScaling={false} style={lunarTextStyle}>{lunarInfo.term || lunarInfo.dayCn}</Text>
+        <Text allowFontScaling={false} style={solarTextStyle}>
+          {String(this.props.children)}
+        </Text>
+        <Text allowFontScaling={false} style={lunarTextStyle}>
+          {lunarInfo.term || lunarInfo.dayCn}
+        </Text>
         {dot}
       </TouchableOpacity>
-    );
+    )
   }
 }
 
-export default Day;
+export default Day

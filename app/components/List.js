@@ -1,30 +1,85 @@
 import React, { Component } from 'react'
-import { StyleSheet, View, Image, ActivityIndicator } from 'react-native'
+import { StyleSheet, View, FlatList, Text, TouchableOpacity, TextInput } from 'react-native';
 import { connect } from 'react-redux'
 
-import { Button, Touchable } from '../components'
+import { Button, Touchable } from "."
 
 import { createAction, NavigationActions } from '../utils'
 
-@connect(({ app }) => ({ ...app }))
+@connect(({ todo }) => ({ ...todo }))
 class TodoList extends Component {
-
-  onLogin = () => {
-    this.props.dispatch(createAction('app/login')())
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedColomn: null,
+      lastPress: 0,
+      text: '',
+    }
   }
+  componentWillMount() {
+  }
+  onDoubleTap = (index, evt) => {
 
-  onClose = () => {
-    this.props.dispatch(NavigationActions.back())
+    let delta = evt.timeStamp - this.state.lastPress;
+    if(delta < 300) {
+      this.setState({
+        selectedColomn: index
+      })
+    }
+    this.setState({
+      lastPress: evt.timeStamp
+    })
+  }
+  savePlan = (index, e) => {
+    console.log('saveplan')
+    const { text } = this.state
+    this.props.dispatch(createAction('todo/saveMonthTodo')({text, index}));
+    this.setState({
+      selectedColomn: null,
+      text: '',
+    })
+  }
+  _renderHeader = ({}) => (
+    <View key='listheader'>
+      <Text style={styles.header}>本月计划</Text>
+    </View>
+  )
+  _renderListItem = ({item, index}) => {
+      return <TouchableOpacity 
+        onPress={ (evt) => this.onDoubleTap(index, evt) }
+        style={styles.listItem}
+        key={index}
+      >
+      {this.state.selectedColomn == index?
+        <TextInput
+          autoFocus={true}
+          style={styles.inputItem}
+          onChangeText={(text) => this.setState({text})}
+          value={this.state.text}
+          onBlur={() => this.savePlan(index) }
+          onSubmitEditing={() => this.savePlan(index) }
+        />
+        :
+        null
+      }
+      {this.state.selectedColomn != index?
+        <Text style={{fontWeight: '200'}}>{`${index + 1}. ${item}`}</Text>
+        :
+        null
+      }
+    </TouchableOpacity>
   }
 
   render() {
-    const { fetching } = this.props
+    const { monthTodo } = this.props
+    console.log(monthTodo)
     return (
       <View style={styles.container}>
         <FlatList
-          data={[{key: 'a'}, {key: 'b'}]}
-          renderItem={({item}) => <Text>{item.key}</Text>}
-          ListHeaderComponent={}
+          style={styles.listWrapper}
+          data={monthTodo.slice()}
+          renderItem={this._renderListItem}
+          ListHeaderComponent={this._renderHeader}
         />
       </View>
     )
@@ -34,8 +89,10 @@ class TodoList extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
   },
   close: {
     position: 'absolute',
@@ -47,6 +104,26 @@ const styles = StyleSheet.create({
     height: 24,
     tintColor: 'gray',
   },
+  header: {
+    fontSize: 20,
+    color: '#333333',
+  },
+  listWrapper: {
+    width: '100%',
+    paddingLeft: 30,
+    paddingRight: 30,
+  },
+  listItem: {
+    width: '100%',
+    height: 50,
+    justifyContent: 'center',
+    borderStyle: 'solid',
+    borderBottomWidth: 1,
+    borderBottomColor: '#EEEEEE',
+  },
+  inputItem: {
+    borderWidth: 0,
+  }
 })
 
 export default TodoList

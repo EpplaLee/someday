@@ -1,10 +1,10 @@
-import { StyleSheet, Platform } from 'react-native';
-import * as defaultStyle from '../../../style';
+import { StyleSheet, Platform } from 'react-native'
+import * as defaultStyle from '../../../style'
 
-const STYLESHEET_ID = 'stylesheet.day.basic';
+const STYLESHEET_ID = 'stylesheet.day.basic'
 
 export default function styleConstructor(theme = {}) {
-  const appStyle = { ...defaultStyle, ...theme };
+  const appStyle = { ...defaultStyle, ...theme }
   return StyleSheet.create({
     base: {
       width: 32,
@@ -27,7 +27,7 @@ export default function styleConstructor(theme = {}) {
       borderRadius: 16,
     },
     today: {
-      backgroundColor: appStyle.todayBackgroundColor
+      backgroundColor: appStyle.todayBackgroundColor,
     },
     todayText: {
       color: appStyle.todayTextColor,
@@ -75,5 +75,5 @@ export default function styleConstructor(theme = {}) {
       opacity: 0,
     },
     ...(theme[STYLESHEET_ID] || {}),
-  });
+  })
 }

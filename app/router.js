@@ -19,7 +19,7 @@ import CalendarPage from './pages/Calendar'
 import AgendaPage from './pages/Agenda'
 
 const HomeNavigator = createBottomTabNavigator({
-  Calendar: { screen: CalendarPage }
+  Calendar: { screen: CalendarPage },
 })
 
 HomeNavigator.navigationOptions = ({ navigation }) => {
