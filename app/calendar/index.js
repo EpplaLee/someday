@@ -237,9 +237,8 @@ class Calendar extends Component {
       this.props.markedDates[day.toString('yyyy-MM-dd')] || EmptyArray
     if (dates.length || dates) {
       return dates
-    } 
-      return false
-    
+    }
+    return false
   }
 
   renderWeekNumber(weekNumber) {

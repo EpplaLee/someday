@@ -70,7 +70,6 @@ class Day extends Component {
         return <View key={index} style={style} />
       })
     }
-    
   }
 
   render() {

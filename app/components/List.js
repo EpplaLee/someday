@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import { StyleSheet, View, FlatList, Text, TouchableOpacity, TextInput } from 'react-native';
 import { connect } from 'react-redux'
-
-import { Button, Touchable } from "."
-
+import { CheckBox } from 'native-base'
 import { createAction, NavigationActions } from '../utils'
 
 @connect(({ todo }) => ({ ...todo }))
@@ -31,7 +29,6 @@ class TodoList extends Component {
     })
   }
   savePlan = (index, e) => {
-    console.log('saveplan')
     const { text } = this.state
     this.props.dispatch(createAction('todo/saveMonthTodo')({text, index}));
     this.setState({
@@ -39,13 +36,16 @@ class TodoList extends Component {
       text: '',
     })
   }
+  tapCheckBox = (index) => {
+
+  }
   _renderHeader = ({}) => (
     <View key='listheader'>
       <Text style={styles.header}>本月计划</Text>
     </View>
   )
   _renderListItem = ({item, index}) => {
-      return <TouchableOpacity 
+      return <View 
         onPress={ (evt) => this.onDoubleTap(index, evt) }
         style={styles.listItem}
         key={index}
@@ -63,11 +63,19 @@ class TodoList extends Component {
         null
       }
       {this.state.selectedColomn != index?
-        <Text style={{fontWeight: '200'}}>{`${index + 1}. ${item}`}</Text>
+      <TouchableOpacity
+        onPress={ (evt) => this.onDoubleTap(index, evt) }
+      >
+        <CheckBox 
+          checked={item.isDone}
+          onPress={() => this.tapCheckBox(index) }
+        />
+        <Text>{`${index + 1}. ${item.text}`}</Text>
+      </TouchableOpacity>
         :
         null
       }
-    </TouchableOpacity>
+    </View>
   }
 
   render() {

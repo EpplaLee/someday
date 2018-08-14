@@ -4,7 +4,7 @@ import * as authService from '../services/auth'
 export default {
   namespace: 'todo',
   state: {
-    monthTodo: ['双击编辑日程...']
+    monthTodo: [{text: '双击编辑日程...', isDone: false}],
   },
   reducers: {
     save(state, props) {
@@ -13,16 +13,18 @@ export default {
   },
   effects: {
     *saveMonthTodo({text, index}, { call, put, select }) {
-      console.log('saveMonthTodo1', monthTodo)
-      const { monthTodo = [] } = yield select(state => state.todo)
-      console.log('saveMonthTodo2', monthTodo)
-      monthTodo[index] = text
+      const { monthTodo = [{text: '双击编辑日程...', isDone: false}] } = yield select(state => state.todo);
+      monthTodo[index] = {text, isDone: false};
       if(index == monthTodo.length - 1) {
-        monthTodo.push('双击编辑日程...');
+        monthTodo.push({text: '双击编辑日程...', isDone: false});
       }
-      console.log('saveMonthTodo3', monthTodo)
-      yield put({ type: 'save', monthTodo: monthTodo.slice() })
+      yield put({ type: 'save', monthTodo: monthTodo.slice() });
     },
+    *toggleMonthTodo({index}, { call, put, select}) {
+      const { monthTodo = [{text: '双击编辑日程...', isDone: false}] } = yield select(state => state.todo);
+      monthTodo[index]['isDone'] = !monthTodo[index]['isDone'];
+      yield put({ type: 'save', monthTodo: monthTodo.slice() });
+    }
   },
   subscriptions: {
     setup({ dispatch }) {

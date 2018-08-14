@@ -34,15 +34,15 @@ export default function shouldComponentUpdate(nextProps, nextState) {
     const nextDate = parseDate(nextProps[next])
     if (prev.update) {
       return prev
-    } if (prevDate !== nextDate) {
+    }
+    if (prevDate !== nextDate) {
       if (prevDate && nextDate && prevDate.getTime() === nextDate.getTime()) {
         return prev
-      } 
-        return {
-          update: true,
-          field: next,
-        }
-      
+      }
+      return {
+        update: true,
+        field: next,
+      }
     }
     return prev
   }, shouldUpdate)
