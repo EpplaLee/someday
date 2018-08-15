@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { ActivityIndicator } from 'react-native'
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome5';
+import { connect } from 'react-redux'
 import XDate from 'xdate'
 import PropTypes from 'prop-types'
 import styleConstructor from './style'
@@ -8,9 +10,11 @@ import {
   CHANGE_MONTH_LEFT_ARROW,
   CHANGE_MONTH_RIGHT_ARROW,
 } from '../../testIDs'
+import { createAction, NavigationActions } from '../../utils'
 
 const weekDaysNames = ['日', '一', '二', '三', '四', '五', '六']
 
+@connect(({ todo }) => ({ ...todo }))
 class CalendarHeader extends Component {
   static propTypes = {
     theme: PropTypes.object,
@@ -66,7 +70,16 @@ class CalendarHeader extends Component {
   }
 
   onPressLeft() {
-    const { onPressArrowLeft } = this.props
+    const { month, dispatch, onPressArrowLeft } = this.props;
+    let yearNum = month.getFullYear();
+    let monthNum = month.getMonth();
+    if(monthNum == 1) {
+      yearNum -= 1;
+      monthNum = 12;
+    } else {
+      monthNum -= 1;
+    }
+    dispatch(createAction('todo/save')({ curMonth: `${yearNum}-${monthNum}`}))
     if (typeof onPressArrowLeft === 'function') {
       return onPressArrowLeft(this.substractMonth)
     }
@@ -74,7 +87,16 @@ class CalendarHeader extends Component {
   }
 
   onPressRight() {
-    const { onPressArrowRight } = this.props
+    const { month, dispatch, onPressArrowRight } = this.props;
+    let yearNum = month.getFullYear();
+    let monthNum = month.getMonth();
+    if(monthNum == 12) {
+      yearNum += 1;
+      monthNum = 1;
+    } else {
+      monthNum += 1;
+    }
+    dispatch(createAction('todo/save')({ curMonth: `${yearNum}-${monthNum}`}))
     if (typeof onPressArrowRight === 'function') {
       return onPressArrowRight(this.addMonth)
     }
@@ -82,6 +104,9 @@ class CalendarHeader extends Component {
   }
 
   render() {
+    const { monthTodo, curMonth } = this.props
+    const curMonthTodo = monthTodo[curMonth] || []
+    console.log('shitttttt', this.props.monthTodo)
     let leftArrow = <View />
     let rightArrow = <View />
     // let weekDaysNames = weekDayNames(this.props.firstDay);
@@ -129,7 +154,6 @@ class CalendarHeader extends Component {
       <View>
         <View style={this.style.header}>
           {leftArrow}
-          <View style={{ flexDirection: 'row' }}>
             <Text
               allowFontScaling={false}
               style={this.style.monthText}
@@ -138,8 +162,20 @@ class CalendarHeader extends Component {
               {`${this.props.month.getFullYear()}年${this.props.month.getMonth() +
                 1}月`}
             </Text>
-            {indicator}
-          </View>
+            <View style={{ position: 'absolute', right: 45, flexDirection: 'row',alignItems: 'center', }}>
+              <Icon style={this.style.todoIcon} name={'list-ol'} size={20} color={'#12b886'} />
+              <Text
+                style={{
+                  marginLeft: 6,
+                  display: curMonthTodo.length > 0? 'flex' : 'none',
+                  fontSize: 18,
+                  color: '#12b886',
+                  transform: [{translateY: -1}],
+                }}
+              >
+                {`${curMonthTodo.reduce( (sum, i) => sum + (i.isDone ? 1 : 0), 0 )}/${curMonthTodo.length}`}
+              </Text>
+            </View>
           {rightArrow}
         </View>
         {!this.props.hideDayNames && (
@@ -166,4 +202,4 @@ class CalendarHeader extends Component {
   }
 }
 
-export default CalendarHeader
+export default CalendarHeader;

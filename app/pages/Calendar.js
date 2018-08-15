@@ -27,7 +27,6 @@ class CalendarPage extends Component {
         <Calendar
           style={{
             width: '100%',
-            height: 320,
           }}
         />
         <TodoList />

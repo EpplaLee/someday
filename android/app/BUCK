@@ -45,12 +45,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.dva",
+    package = "com.someday",
 )
 
 android_resource(
     name = "res",
-    package = "com.dva",
+    package = "com.someday",
     res = "src/main/res",
 )
 

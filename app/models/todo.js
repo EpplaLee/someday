@@ -4,7 +4,10 @@ import * as authService from '../services/auth'
 export default {
   namespace: 'todo',
   state: {
-    monthTodo: [{text: '双击编辑日程...', isDone: false}],
+    monthTodo: {
+      '2018-7': [{text: 'shit', isDone: true}]
+    },
+    curMonth: `${new Date().getFullYear()}-${new Date().getMonth()}`
   },
   reducers: {
     save(state, props) {
@@ -13,18 +16,20 @@ export default {
   },
   effects: {
     *saveMonthTodo({text, index}, { call, put, select }) {
-      const { monthTodo = [{text: '双击编辑日程...', isDone: false}] } = yield select(state => state.todo);
-      monthTodo[index] = {text, isDone: false};
-      if(index == monthTodo.length - 1) {
-        monthTodo.push({text: '双击编辑日程...', isDone: false});
+      const { monthTodo = {}, curMonth  } = yield select(state => state.todo);
+      if(monthTodo[curMonth]) {
+        monthTodo[curMonth][index]['text'] = text;
+        monthTodo[curMonth][index]['isDone'] = monthTodo[curMonth][index]['isDone'] || false;
+      } else {
+        monthTodo[curMonth] = [{text, isDone: false}];
       }
       yield put({ type: 'save', monthTodo: monthTodo.slice() });
     },
     *toggleMonthTodo({index}, { call, put, select}) {
-      const { monthTodo = [{text: '双击编辑日程...', isDone: false}] } = yield select(state => state.todo);
-      monthTodo[index]['isDone'] = !monthTodo[index]['isDone'];
-      yield put({ type: 'save', monthTodo: monthTodo.slice() });
-    }
+      const { monthTodo, curMonth } = yield select(state => state.todo);
+      monthTodo[curMonth][index]['isDone'] = !monthTodo[curMonth][index]['isDone'];
+      yield put({ type: 'save', monthTodo: Object.assign({}, ...monthTodo) });
+    },
   },
   subscriptions: {
     setup({ dispatch }) {

@@ -14,11 +14,14 @@ export default function(theme = {}) {
       alignItems: 'center',
     },
     monthText: {
-      fontSize: appStyle.textMonthFontSize,
+      fontSize: 20,
       fontFamily: appStyle.textMonthFontFamily,
       fontWeight: appStyle.textMonthFontWeight,
       color: '#739EAF',
-      margin: 10,
+      margin: 20,
+    },
+    todoIcon: {
+      marginLeft: 10,
     },
     arrow: {
       padding: 10,

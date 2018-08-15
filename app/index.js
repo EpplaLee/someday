@@ -18,4 +18,4 @@ const app = dva({
 
 const App = app.start(<Router />)
 
-AppRegistry.registerComponent('dva', () => App)
+AppRegistry.registerComponent('someday', () => App)
