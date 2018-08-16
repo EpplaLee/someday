@@ -4,11 +4,11 @@ import { AppRegistry } from 'react-native'
 import dva from './utils/dva'
 import Router, { routerMiddleware, routerReducer } from './router'
 import appModel from './models/app'
-import todo from './models/todo'
+import month from './models/month'
 
 const app = dva({
   initialState: {},
-  models: [appModel, todo],
+  models: [appModel, month],
   extraReducers: { router: routerReducer },
   onAction: [routerMiddleware],
   onError(e) {

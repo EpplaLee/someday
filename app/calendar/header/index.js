@@ -14,7 +14,7 @@ import { createAction, NavigationActions } from '../../utils'
 
 const weekDaysNames = ['日', '一', '二', '三', '四', '五', '六']
 
-@connect(({ todo }) => ({ ...todo }))
+@connect(({ month }) => ({ ...month }))
 class CalendarHeader extends Component {
   static propTypes = {
     theme: PropTypes.object,
@@ -66,6 +66,9 @@ class CalendarHeader extends Component {
     if (nextProps.hideDayNames !== this.props.hideDayNames) {
       return true
     }
+    if(nextProps.monthTodo !== this.props.monthTodo) {
+      return true
+    }
     return false
   }
 
@@ -79,7 +82,7 @@ class CalendarHeader extends Component {
     } else {
       monthNum -= 1;
     }
-    dispatch(createAction('todo/save')({ curMonth: `${yearNum}-${monthNum}`}))
+    dispatch(createAction('month/save')({ curMonth: `${yearNum}-${monthNum}`}))
     if (typeof onPressArrowLeft === 'function') {
       return onPressArrowLeft(this.substractMonth)
     }
@@ -96,7 +99,7 @@ class CalendarHeader extends Component {
     } else {
       monthNum += 1;
     }
-    dispatch(createAction('todo/save')({ curMonth: `${yearNum}-${monthNum}`}))
+    dispatch(createAction('month/save')({ curMonth: `${yearNum}-${monthNum}`}))
     if (typeof onPressArrowRight === 'function') {
       return onPressArrowRight(this.addMonth)
     }
@@ -163,7 +166,15 @@ class CalendarHeader extends Component {
                 1}月`}
             </Text>
             <View style={{ position: 'absolute', right: 45, flexDirection: 'row',alignItems: 'center', }}>
-              <Icon style={this.style.todoIcon} name={'list-ol'} size={20} color={'#12b886'} />
+              <Icon 
+                style={{
+                  marginLeft: 10,
+                  display: curMonthTodo.length > 0? 'flex' : 'none',
+                }} 
+                name={'list-ol'} 
+                size={20} 
+                color={'#12b886'} 
+              />
               <Text
                 style={{
                   marginLeft: 6,

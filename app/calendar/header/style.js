@@ -20,9 +20,6 @@ export default function(theme = {}) {
       color: '#739EAF',
       margin: 20,
     },
-    todoIcon: {
-      marginLeft: 10,
-    },
     arrow: {
       padding: 10,
     },

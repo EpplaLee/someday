@@ -5,7 +5,7 @@ import { connect} from 'react-redux'
 import { Checkbox } from 'teaset'
 import { createAction, NavigationActions } from '../utils'
 
-@connect(({ todo }) => ({ ...todo }))
+@connect(({ month }) => ({ ...month }))
 class TodoList extends Component {
   constructor(props) {
     super(props);
@@ -31,14 +31,15 @@ class TodoList extends Component {
   }
   savePlan = (index, e) => {
     const { text } = this.state
-    this.props.dispatch(createAction('todo/saveMonthTodo')({text, index}));
+    this.props.dispatch(createAction('month/saveMonthTodo')({text, index}));
     this.setState({
       selectedColomn: null,
       text: '',
     })
   }
   tapCheckBox = (index) => {
-
+    console.log('triggled')
+    this.props.dispatch(createAction('month/toggleMonthTodo')({index}))
   }
   _renderHeader = ({}) => (
     <View style={{ flexDirection: 'row' }}>
@@ -72,7 +73,7 @@ class TodoList extends Component {
         <Checkbox
           style={{ display: item.text === '双击编辑日程...'? 'none' : 'flex' }}
           checked={item.isDone}
-          onPress={() => this.tapCheckBox(index) }
+          onChange={() => this.tapCheckBox(index) }
         />
         <Text 
           style={{ 
@@ -93,7 +94,7 @@ class TodoList extends Component {
   render() {
     const { monthTodo, curMonth } = this.props;
     console.log(monthTodo, curMonth, 'shit');
-    const curMonthTodo = monthTodo[curMonth] || [];
+    const curMonthTodo = monthTodo[curMonth]&&monthTodo[curMonth].slice() || [];
     if(curMonthTodo.length == 0 || curMonthTodo[curMonthTodo.length - 1]['text'] != '双击编辑日程...') {
       curMonthTodo.push({text: '双击编辑日程...'})
     }
