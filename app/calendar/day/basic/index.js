@@ -3,9 +3,12 @@ import { TouchableOpacity, Text, View } from 'react-native'
 import PropTypes from 'prop-types'
 import { shouldUpdate } from '../../../component-updater'
 import solarLunar from '../../../solarLunar'
-
+import { createAction, NavigationActions } from '../../../utils'
+import { connect} from 'react-redux'
 import styleConstructor from './style'
+import XDate from 'xdate'
 
+@connect(({ daily }) => ({ ...daily }))
 class Day extends Component {
   static propTypes = {
     // TODO: disabled props should be removed
@@ -14,7 +17,6 @@ class Day extends Component {
     // Specify theme properties to override specific styles for calendar parts. Default = {}
     theme: PropTypes.object,
     marking: PropTypes.any,
-    onPress: PropTypes.func,
     onLongPress: PropTypes.func,
     date: PropTypes.object,
     day: PropTypes.object,
@@ -28,6 +30,7 @@ class Day extends Component {
   }
 
   onDayPress() {
+    this.props.dispatch(createAction('daily/save')({ curday: this.props.date}));
     this.props.onPress(this.props.date)
   }
 
@@ -36,19 +39,24 @@ class Day extends Component {
   }
 
   solarToLunar(day) {
+    const { date } = this.props
     return solarLunar.solar2lunar(
-      day.getFullYear(),
-      day.getMonth(),
-      day.getDate()
+      date.year,
+      date.month,
+      date.day,
     )
   }
 
   shouldComponentUpdate(nextProps) {
+    if(nextProps.curday === this.props.date) {
+      return true
+    } else if(this.props.curday === this.props.date) {
+      return true
+    }
     return shouldUpdate(this.props, nextProps, [
       'state',
       'children',
       'marking',
-      'onPress',
       'onLongPress',
       'weekNumber',
     ])
@@ -96,7 +104,9 @@ class Day extends Component {
       solarTextStyle.push(this.style.todayText)
       lunarTextStyle.push(this.style.todayText)
     }
-
+    if(this.props.date === this.props.curday) {
+      containerStyle.push(this.style.selected)
+    }
     return (
       <TouchableOpacity
         style={containerStyle}

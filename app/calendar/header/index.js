@@ -74,15 +74,7 @@ class CalendarHeader extends Component {
 
   onPressLeft() {
     const { month, dispatch, onPressArrowLeft } = this.props;
-    let yearNum = month.getFullYear();
-    let monthNum = month.getMonth();
-    if(monthNum == 1) {
-      yearNum -= 1;
-      monthNum = 12;
-    } else {
-      monthNum -= 1;
-    }
-    dispatch(createAction('month/save')({ curMonth: `${yearNum}-${monthNum}`}))
+    dispatch(createAction('month/save')({ curMonth: month.clone().addMonths(-1).toString('yyyy-MM') }))
     if (typeof onPressArrowLeft === 'function') {
       return onPressArrowLeft(this.substractMonth)
     }
@@ -91,15 +83,7 @@ class CalendarHeader extends Component {
 
   onPressRight() {
     const { month, dispatch, onPressArrowRight } = this.props;
-    let yearNum = month.getFullYear();
-    let monthNum = month.getMonth();
-    if(monthNum == 12) {
-      yearNum += 1;
-      monthNum = 1;
-    } else {
-      monthNum += 1;
-    }
-    dispatch(createAction('month/save')({ curMonth: `${yearNum}-${monthNum}`}))
+    dispatch(createAction('month/save')({ curMonth: month.clone().addMonths(1).toString('yyyy-MM') }))
     if (typeof onPressArrowRight === 'function') {
       return onPressArrowRight(this.addMonth)
     }

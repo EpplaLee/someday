@@ -4,12 +4,10 @@ import * as authService from '../services/auth'
 import XDate from 'xdate'
 
 export default {
-  namespace: 'month',
+  namespace: 'daily',
   state: {
-    monthTodo: {
-      '2018-08': [{text: 'shit', isDone: true}],
-    },
-    curMonth: new XDate().toString('yyyy-MM'),
+    dailyTodo: {},
+    curday: new XDate().toString('yyyy-MM-dd')
   },
   reducers: {
     save(state, props) {
@@ -18,14 +16,14 @@ export default {
   },
   effects: {
     *loadStorage({}, {put}) {
-      const monthTodo = yield AsyncStorage.getItem('monthTodo');
-      if(monthTodo) {
-        yield put({ type: 'save', monthTodo: JSON.parse(monthTodo) });
+      const dailyTodo = yield AsyncStorage.getItem('dailyTodo');
+      if(dailyTodo) {
+        yield put({ type: 'save', monthTodo: JSON.parse(dailyTodo) });
       }
     },
-    *saveMonthTodo({text, index}, { call, put, select }) {
-      const { monthTodo = {}, curMonth  } = yield select(state => state.month);
-      console.log('curMonth', curMonth, monthTodo)
+    *saveDailyTodo({text, index}, { call, put, select }) {
+      const { monthTodo = {}, curMonth  } = yield select(state => state.todo);
+
       if(monthTodo[curMonth] && monthTodo[curMonth].length - 1 < index) {
         monthTodo[curMonth][index] = { text, isDone: false }
       } else if(monthTodo[curMonth]) {
@@ -44,7 +42,7 @@ export default {
       AsyncStorage.setItem('monthTodo', JSON.stringify(monthTodo))
     },
     *toggleMonthTodo({index}, { call, put, select}) {
-      const { monthTodo, curMonth } = yield select(state => state.month);
+      const { monthTodo, curMonth } = yield select(state => state.todo);
       monthTodo[curMonth][index]['isDone'] = !monthTodo[curMonth][index]['isDone'];
       console.log('toggleMonthTodo', monthTodo)
       yield put({ type: 'save', monthTodo: Object.assign({}, monthTodo) });
