@@ -6,8 +6,10 @@ import XDate from 'xdate'
 export default {
   namespace: 'daily',
   state: {
-    dailyTodo: {},
-    curday: new XDate().toString('yyyy-MM-dd')
+    dailyTodo: {
+
+    },
+    curday: null,
   },
   reducers: {
     save(state, props) {
@@ -17,29 +19,52 @@ export default {
   effects: {
     *loadStorage({}, {put}) {
       const dailyTodo = yield AsyncStorage.getItem('dailyTodo');
-      if(dailyTodo) {
-        yield put({ type: 'save', monthTodo: JSON.parse(dailyTodo) });
+      yield put({ type: 'save', dailyTodo: JSON.parse(dailyTodo) });
+    },
+    *saveTheDay({today}, {put, select}) {
+      const { curday, dailyTodo } = yield select(state => state.daily);
+      const { monthTodo = {}, curMonth  } = yield select(state => state.month);
+      console.log('dailyTodo', today, dailyTodo);
+      if(!dailyTodo[curMonth]) {
+        dailyTodo[curMonth] = {}
+      }
+      if(!dailyTodo[curMonth][today]) {
+        dailyTodo[curMonth][today] = []
+      }
+      yield put({ type: 'save', dailyTodo:  Object.assign({}, dailyTodo) });
+
+      if(today === curday) {
+        yield put({ type: 'save', curday: null });
+        yield put({ type: 'todo/save', todolist: (monthTodo[curMonth] || []).slice() })
+      } else {
+        yield put({ type: 'save', curday: today });
+        yield put({ type: 'todo/save', todolist: dailyTodo[curMonth][today].slice() });
       }
     },
-    *saveDailyTodo({text, index}, { call, put, select }) {
-      const { monthTodo = {}, curMonth  } = yield select(state => state.todo);
-
-      if(monthTodo[curMonth] && monthTodo[curMonth].length - 1 < index) {
-        monthTodo[curMonth][index] = { text, isDone: false }
-      } else if(monthTodo[curMonth]) {
-        monthTodo[curMonth][index] = {
+    *saveDailyTodo({ text, index }, { call, put, select }) {
+      const { curday, dailyTodo } = yield select(state => state.daily);
+      const { curMonth } = yield select(state => state.month);
+      console.log('saveDailyTodo', curMonth, curday, dailyTodo)
+      if(dailyTodo[curMonth][curday] && dailyTodo[curMonth][curday].length - 1 < index) {
+        dailyTodo[curMonth][curday][index] = { text, isDone: false }
+      } else if(dailyTodo[curMonth][curday]) {
+        dailyTodo[curMonth][curday][index] = {
           text,
-          isDone: monthTodo[curMonth][index]['isDone']? true : false,
+          isDone: dailyTodo[curMonth][curday][index]['isDone']? true : false,
         }
       } else {
-        monthTodo[curMonth] = [{text, isDone: false}];
+        dailyTodo[curMonth][curday] = [{text, isDone: false}];
       }
 
       yield put({ 
         type: 'save', 
-        monthTodo: Object.assign({}, monthTodo),
+        dailyTodo: Object.assign({}, dailyTodo),
       });
-      AsyncStorage.setItem('monthTodo', JSON.stringify(monthTodo))
+      yield put({
+        type: 'todo/save',
+        todolist: (dailyTodo[curMonth][curday] || []).slice()
+      })
+      AsyncStorage.setItem('dailyTodo', JSON.stringify(dailyTodo))
     },
     *toggleMonthTodo({index}, { call, put, select}) {
       const { monthTodo, curMonth } = yield select(state => state.todo);

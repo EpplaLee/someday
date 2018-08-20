@@ -74,7 +74,7 @@ class CalendarHeader extends Component {
 
   onPressLeft() {
     const { month, dispatch, onPressArrowLeft } = this.props;
-    dispatch(createAction('month/save')({ curMonth: month.clone().addMonths(-1).toString('yyyy-MM') }))
+    dispatch(createAction('month/changeMonth')({ curMonth: month.clone().addMonths(-1).toString('yyyy-MM') }))
     if (typeof onPressArrowLeft === 'function') {
       return onPressArrowLeft(this.substractMonth)
     }
@@ -83,7 +83,7 @@ class CalendarHeader extends Component {
 
   onPressRight() {
     const { month, dispatch, onPressArrowRight } = this.props;
-    dispatch(createAction('month/save')({ curMonth: month.clone().addMonths(1).toString('yyyy-MM') }))
+    dispatch(createAction('month/changeMonth')({ curMonth: month.clone().addMonths(1).toString('yyyy-MM') }))
     if (typeof onPressArrowRight === 'function') {
       return onPressArrowRight(this.addMonth)
     }
@@ -93,7 +93,6 @@ class CalendarHeader extends Component {
   render() {
     const { monthTodo, curMonth } = this.props
     const curMonthTodo = monthTodo[curMonth] || []
-    console.log('shitttttt', this.props.monthTodo)
     let leftArrow = <View />
     let rightArrow = <View />
     // let weekDaysNames = weekDayNames(this.props.firstDay);

@@ -30,7 +30,7 @@ class Day extends Component {
   }
 
   onDayPress() {
-    this.props.dispatch(createAction('daily/save')({ curday: this.props.date}));
+    this.props.dispatch(createAction('daily/saveTheDay')({ today: this.props.date.dateString}));
     this.props.onPress(this.props.date)
   }
 
@@ -48,9 +48,9 @@ class Day extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    if(nextProps.curday === this.props.date) {
+    if(nextProps.curday === this.props.date.dateString) {
       return true
-    } else if(this.props.curday === this.props.date) {
+    } else if(this.props.curday === this.props.date.dateString) {
       return true
     }
     return shouldUpdate(this.props, nextProps, [
@@ -104,7 +104,7 @@ class Day extends Component {
       solarTextStyle.push(this.style.todayText)
       lunarTextStyle.push(this.style.todayText)
     }
-    if(this.props.date === this.props.curday) {
+    if(this.props.date.dateString === this.props.curday) {
       containerStyle.push(this.style.selected)
     }
     return (

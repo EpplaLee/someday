@@ -8,7 +8,7 @@ import TodoList from '../components/List'
 
 import { createAction, NavigationActions } from '../utils'
 
-@connect(({ app }) => ({ ...app }))
+@connect(({ }) => ({ }))
 class CalendarPage extends Component {
   static navigationOptions = {
     tabBarLabel: 'Calendar',
@@ -21,7 +21,6 @@ class CalendarPage extends Component {
   }
 
   render() {
-    const { login } = this.props
     return (
       <View style={styles.container}>
         <Calendar

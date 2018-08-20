@@ -11,12 +11,7 @@ import {
   createNavigationReducer,
 } from 'react-navigation-redux-helpers'
 import { connect } from 'react-redux'
-
-import Loading from './pages/Loading'
-import Login from './pages/Login'
-import CalendarListPage from './pages/CalendarList'
 import CalendarPage from './pages/Calendar'
-import AgendaPage from './pages/Agenda'
 
 const HomeNavigator = createBottomTabNavigator({
   Calendar: { screen: CalendarPage },
@@ -42,7 +37,6 @@ const MainNavigator = createStackNavigator(
 const AppNavigator = createStackNavigator(
   {
     Main: { screen: MainNavigator },
-    Login: { screen: Login },
   },
   {
     headerMode: 'none',
@@ -120,8 +114,7 @@ class Router extends PureComponent {
   }
 
   render() {
-    const { app, dispatch, router } = this.props
-    if (app.loading) return <Loading />
+    const { dispatch, router } = this.props
 
     return <App dispatch={dispatch} state={router} />
   }

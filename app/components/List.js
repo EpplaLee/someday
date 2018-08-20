@@ -5,7 +5,7 @@ import { connect} from 'react-redux'
 import { Checkbox } from 'teaset'
 import { createAction, NavigationActions } from '../utils'
 
-@connect(({ month }) => ({ ...month }))
+@connect(({ month, daily, todo }) => ({ ...month, ...daily, ...todo }))
 class TodoList extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +18,6 @@ class TodoList extends Component {
   componentWillMount() {
   }
   onDoubleTap = (index, evt) => {
-
     let delta = evt.timeStamp - this.state.lastPress;
     if(delta < 300) {
       this.setState({
@@ -31,7 +30,12 @@ class TodoList extends Component {
   }
   savePlan = (index, e) => {
     const { text } = this.state
-    this.props.dispatch(createAction('month/saveMonthTodo')({text, index}));
+    const { dispatch, curday } = this.props;
+    if( curday ) {
+      dispatch(createAction('daily/saveDailyTodo')({text, index}));
+    } else {
+      dispatch(createAction('month/saveMonthTodo')({text, index}));
+    }
     this.setState({
       selectedColomn: null,
       text: '',
@@ -44,7 +48,7 @@ class TodoList extends Component {
   _renderHeader = ({}) => (
     <View style={{ flexDirection: 'row' }}>
       <Icon style={{ marginRight: 5}} name={'list-ol'} size={20} color={'#adb5bd'} />
-      <Text style={styles.header}>本月计划</Text>
+      <Text style={styles.header}>{`${this.props.curday? '今日' : '本月'}计划`}</Text>
     </View>
   )
   _renderListItem = ({item, index}) => {
@@ -92,9 +96,9 @@ class TodoList extends Component {
   }
 
   render() {
-    const { monthTodo, curMonth } = this.props;
-    console.log(monthTodo, curMonth, 'shit');
-    const curMonthTodo = monthTodo[curMonth]&&monthTodo[curMonth].slice() || [];
+    const { todolist = [], curMonth } = this.props;
+    console.log(todolist, curMonth, 'shit');
+    const curMonthTodo = todolist.slice();
     if(curMonthTodo.length == 0 || curMonthTodo[curMonthTodo.length - 1]['text'] != '双击编辑日程...') {
       curMonthTodo.push({text: '双击编辑日程...'})
     }
@@ -102,7 +106,7 @@ class TodoList extends Component {
       <View style={styles.container}>
         <FlatList
           style={styles.listWrapper}
-          data={curMonthTodo.slice()}
+          data={curMonthTodo}
           renderItem={this._renderListItem}
           ListHeaderComponent={this._renderHeader}
         />
